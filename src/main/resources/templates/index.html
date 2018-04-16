@@ -57,14 +57,14 @@
           </div>
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-            <li data-name="home" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="主页" lay-direction="2">
+            <li data-name="home" class="layui-nav-item" th:each="menu:${menuList}">
+              <a href="javascript:;" lay-tips="${menu.name}" lay-direction="2">
                 <i class="layui-icon layui-icon-home"></i>
-                <cite>主页</cite>
+                <cite th:text="${menu.name}"></cite>
               </a>
               <dl class="layui-nav-child">
                 <dd data-name="console" class="layui-this">
-                  <a lay-href="home/console.html">控制台</a>
+                  <a lay-href="${menu.url}" th:text="${menu.name}"></a>
                 </dd>
               </dl>
             </li>

@@ -3,6 +3,7 @@ package com.boot.cloudadmin.sys.controller;
 import com.boot.cloudadmin.common.base.BaseController;
 import com.boot.cloudadmin.common.base.R;
 import com.boot.cloudadmin.common.utils.shiro.ShiroUtils;
+import com.boot.cloudadmin.sys.service.IMenuService;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import org.apache.shiro.authc.AuthenticationException;
@@ -36,6 +37,9 @@ public class LoginController extends BaseController {
     @Autowired
     private Producer producer;
 
+    @Autowired
+    private IMenuService menuService;
+
     /**
      * 登录页面
      * @return
@@ -62,6 +66,7 @@ public class LoginController extends BaseController {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             subject.login(token);
             ShiroUtils.setSessionAttribute("user",ShiroUtils.getUserEntity());
+            /** 获取登录用户的菜单 **/
         }catch (UnknownAccountException e) {
             return R.error(e.getMessage());
         }catch (IncorrectCredentialsException e) {
