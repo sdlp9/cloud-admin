@@ -65,8 +65,6 @@ public class LoginController extends BaseController {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             subject.login(token);
-            ShiroUtils.setSessionAttribute("user",ShiroUtils.getUserEntity());
-            /** 获取登录用户的菜单 **/
         }catch (UnknownAccountException e) {
             return R.error(e.getMessage());
         }catch (IncorrectCredentialsException e) {
