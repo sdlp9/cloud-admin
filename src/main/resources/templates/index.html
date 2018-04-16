@@ -9,13 +9,13 @@
   <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="../static/layui/css/icon.css" media="all">
   <link rel="stylesheet" href="../static/style/admin.css" media="all">
-  
+
   <script>
   /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
   </script>
 </head>
 <body class="layui-layout-body">
-  
+
   <div id="LAY_app">
     <div class="layui-layout layui-layout-admin">
       <div class="layui-header">
@@ -33,7 +33,7 @@
           </li>
         </ul>
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
-          
+
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
               <cite th:text="${user.username}"></cite>
@@ -48,7 +48,7 @@
 
         </ul>
       </div>
-      
+
       <!-- 侧边菜单 -->
       <div class="layui-side layui-side-menu">
         <div class="layui-side-scroll">
@@ -57,14 +57,14 @@
           </div>
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-            <li data-name="home" class="layui-nav-item" th:each="menu:${menuList}">
-              <a href="javascript:;" lay-tips="${menu.name}" lay-direction="2">
+            <li data-name="home" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="主页" lay-direction="2">
                 <i class="layui-icon layui-icon-home"></i>
-                <cite th:text="${menu.name}"></cite>
+                <cite>主页</cite>
               </a>
               <dl class="layui-nav-child">
                 <dd data-name="console" class="layui-this">
-                  <a lay-href="${menu.url}" th:text="${menu.name}"></a>
+                  <a lay-href="/toHome">控制台</a>
                 </dd>
               </dl>
             </li>
@@ -101,19 +101,19 @@
         </div>
         <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
           <ul class="layui-tab-title" id="LAY_app_tabsheader">
-            <li lay-id="home/console.html" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+            <li lay-id="/toHome" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
           </ul>
         </div>
       </div>
-      
-      
+
+
       <!-- 主体内容 -->
       <div class="layui-body" id="LAY_app_body">
         <div class="layadmin-tabsbody-item layui-show">
-          <iframe src="/index/toHome" frameborder="0" class="layadmin-iframe"></iframe>
+          <iframe src="/toHome" frameborder="0" class="layadmin-iframe"></iframe>
         </div>
       </div>
-      
+
       <!-- 辅助元素，一般用于移动设备下遮罩 -->
       <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>

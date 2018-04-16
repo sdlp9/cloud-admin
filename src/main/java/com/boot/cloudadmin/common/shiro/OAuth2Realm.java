@@ -122,8 +122,8 @@ public class OAuth2Realm extends AuthorizingRealm {
     }
 
     public static void main(String[] args) {
-        String md5pass = CryptTool.md5Digest("admin");
-        String salt = "b9e79eb2742c406bae1aa48ece3ea0be";
+        String md5pass = "9221ee6fa6dfecaea6c68da5226248bb";
+        String salt = "YzcmCZNvbXocrsz9dm8e";
         String newPassword = new SimpleHash(ShiroUtils.hashAlgorithmName,md5pass,salt,ShiroUtils.hashIterations).toHex();
         System.out.println(newPassword);
     }
