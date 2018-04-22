@@ -57,25 +57,14 @@
           </div>
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-            <li data-name="home" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="主页" lay-direction="2">
-                <i class="layui-icon layui-icon-home"></i>
-                <cite>主页</cite>
+            <li th:data-name="${menu.name}" class="layui-nav-item" th:each="menu : ${menuList}">
+              <a href="javascript:;" th:lay-tips="${menu.name}" lay-direction="2">
+                <i th:class="${menu.icon}"></i>
+                <cite th:text="${menu.name}">主页</cite>
               </a>
-              <dl class="layui-nav-child">
-                <dd data-name="console" class="layui-this">
-                  <a lay-href="/toHome">控制台</a>
-                </dd>
-              </dl>
-            </li>
-            <li data-name="home" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="系统设置" lay-direction="2">
-                <i class="layui-icon layui-icon-shezhi"></i>
-                <cite>系统设置</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd data-name="console" class="layui-this">
-                  <a lay-href="user/userList">用户管理</a>
+              <dl class="layui-nav-child" th:each="menu2 : ${menu.list}">
+                <dd th:data-name="${menu2.name}">
+                  <a th:lay-href="${menu2.url}" th:text="${menu2.name}">控制台</a>
                 </dd>
               </dl>
             </li>

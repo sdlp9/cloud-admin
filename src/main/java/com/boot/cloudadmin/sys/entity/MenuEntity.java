@@ -2,10 +2,12 @@ package com.boot.cloudadmin.sys.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.List;
 
+@TableName("t_sys_menu")
 public class MenuEntity implements Serializable{
 
     private static final long serialVersionUID = 1L;

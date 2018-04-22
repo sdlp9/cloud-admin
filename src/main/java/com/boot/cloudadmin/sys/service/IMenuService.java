@@ -11,4 +11,18 @@ public interface IMenuService extends IService<MenuEntity> {
      * 获取用户菜单列表
      */
     List<MenuEntity> getUserMenuList(Long userId);
+
+    /**
+     * 根据用户id 获取用户的按钮权限
+     * @param userId
+     * @return
+     */
+    List<String> getUserPermissions(Long userId);
+
+    /**
+     * 根据父ID查询子菜单
+     * @param parentId
+     * @return
+     */
+    List<MenuEntity> queryListByParentId(Long parentId);
 }

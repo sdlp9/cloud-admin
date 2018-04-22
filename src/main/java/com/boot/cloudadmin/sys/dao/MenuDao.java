@@ -10,7 +10,23 @@ import java.util.List;
 public interface MenuDao extends BaseMapper<MenuEntity>{
 
     /**
-     * 获取用户菜单列表
+     * 获取用户按钮权限
+     * @param userId
+     * @return
      */
-    List<MenuEntity> getUserMenuList(Long userId);
+    List<String> getUserPermissions(Long userId);
+
+    /**
+     * 查询用户所有菜单id
+     * @param userId
+     * @return
+     */
+    List<Long> queryAllMenuId(Long userId);
+
+    /**
+     * 根据父ID查询子菜单
+     * @param parentId
+     * @return
+     */
+    List<MenuEntity> queryListByParentId(Long parentId);
 }
