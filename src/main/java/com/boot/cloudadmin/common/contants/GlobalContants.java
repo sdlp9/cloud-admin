@@ -64,6 +64,8 @@ public class GlobalContants {
     /** 登录失败 **/
     public static final int LOGIN_FAIL = 601;
 
+    public static final int VALIDATOR_CODE = 602;
+
     /**
      * 菜单类型
      *

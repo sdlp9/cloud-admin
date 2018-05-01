@@ -68,6 +68,9 @@ layui.extend({
   ,APP_BODY = '#LAY_app_body', FILTER_TAB_TBAS = 'layadmin-layout-tabs'
   ,$ = layui.$, $win = $(window);
   
+  //初始
+  if(admin.screen() < 2) admin.sideFlexible();
+  
   //将模块根路径设置为 controller 目录
   layui.config({
     base: setter.base + 'modules/'

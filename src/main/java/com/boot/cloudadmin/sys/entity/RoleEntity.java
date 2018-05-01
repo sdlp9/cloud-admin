@@ -1,10 +1,12 @@
 package com.boot.cloudadmin.sys.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 角色
@@ -30,6 +32,13 @@ public class RoleEntity implements Serializable {
      * 备注
      */
     private String remark;
+
+    /**
+     * 菜单列表
+     */
+    @TableField(exist=false)
+    private List<Long> menuIdList;
+
     /**
      * 创建者ID
      */
@@ -98,5 +107,13 @@ public class RoleEntity implements Serializable {
      */
     public Date getCreateTime() {
         return createTime;
+    }
+
+    public List<Long> getMenuIdList() {
+        return menuIdList;
+    }
+
+    public void setMenuIdList(List<Long> menuIdList) {
+        this.menuIdList = menuIdList;
     }
 }

@@ -25,4 +25,16 @@ public interface IMenuService extends IService<MenuEntity> {
      * @return
      */
     List<MenuEntity> queryListByParentId(Long parentId);
+
+    /**
+     * 获取菜单和目录类型的菜单列表
+     * @return
+     */
+    List<MenuEntity> queryNotButtonList();
+
+    /**
+     * 删除菜单
+     * @param menuId
+     */
+    void delete(Long menuId);
 }

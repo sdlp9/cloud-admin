@@ -5,19 +5,22 @@ import com.boot.cloudadmin.common.contants.GlobalContants;
 import com.boot.cloudadmin.sys.dao.MenuDao;
 import com.boot.cloudadmin.sys.entity.MenuEntity;
 import com.boot.cloudadmin.sys.service.IMenuService;
+import com.boot.cloudadmin.sys.service.IRoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service("menuService")
 public class MenuServiceImpl extends ServiceImpl<MenuDao,MenuEntity> implements IMenuService{
 
     @Autowired
-    private MenuDao menuDao;
+    private IRoleMenuService roleMenuService;
 
     @Override
     public List<MenuEntity> getUserMenuList(Long userId) {
@@ -28,19 +31,24 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao,MenuEntity> implements 
             return this.getAllMenuList(null);
         }
         //查询用户下所有菜单idlist
-        List<Long> menuIdList = menuDao.queryAllMenuId(userId);
+        List<Long> menuIdList = this.baseMapper.queryAllMenuId(userId);
         //获取菜单
         return getAllMenuList(menuIdList);
     }
 
     @Override
     public List<String> getUserPermissions(Long userId) {
-        return menuDao.getUserPermissions(userId);
+        return this.baseMapper.getUserPermissions(userId);
     }
 
     @Override
     public List<MenuEntity> queryListByParentId(Long parentId) {
         return baseMapper.queryListByParentId(parentId);
+    }
+
+    @Override
+    public List<MenuEntity> queryNotButtonList() {
+        return baseMapper.queryNotButtonList();
     }
 
     /**
@@ -93,6 +101,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao,MenuEntity> implements 
         }
 
         return subMenuList;
+    }
+
+    @Override
+    public void delete(Long menuId){
+        //删除菜单
+        this.deleteById(menuId);
+        //删除菜单与角色关联
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("menu_id",menuId);
+        roleMenuService.deleteByMap(params);
     }
 
 }

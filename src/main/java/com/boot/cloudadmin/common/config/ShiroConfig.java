@@ -1,5 +1,6 @@
 package com.boot.cloudadmin.common.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.boot.cloudadmin.common.shiro.OAuth2Realm;
 import com.boot.cloudadmin.common.shiro.RedisShiroSessionDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -85,6 +86,11 @@ public class ShiroConfig {
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;
+    }
+
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 
     @Bean("lifecycleBeanPostProcessor")

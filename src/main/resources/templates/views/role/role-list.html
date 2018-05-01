@@ -6,37 +6,81 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="../../../static/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../../../static/layui/css/icon.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../static/layui/css/icon.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../static/plugins/ztree/css/metroStyle/metroStyle.css">
+    <script type="text/javascript" src="../../../static/layui/layui.js"></script>
+    <script type="text/javascript" src="../../../static/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../../static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/ztree/jquery.ztree.all.min.js"></script>
 </head>
 <body>
-    <div class="layui-fluid">
-        <div class="layui-row layui-col-space15">
-            <div class="layui-col-md12">
-                <div class="layui-card">
-                    <div class="layui-card-header">角色列表</div>
-                    <div class="layui-card-body">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label">用户名</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" id="userName" name="userName" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+    <div id="rrapp" style="margin-top: 15px">
+        <div v-show="!showForm" class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">{{title}}</div>
+                        <div class="layui-card-body">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="q.rolename" autocomplete="off" placeholder="请输入角色名" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-btn-container" style="float:right">
+                                    <button class="layui-btn layui-btn-normal" @click="fn_search">查询</button>
+                                    <button class="layui-btn" @click="fn_add">增加</button>
+                                    <button class="layui-btn layui-btn-primary" @click="fn_update">编辑</button>
+                                    <button class="layui-btn layui-btn-danger" @click="fn_delete">删除</button>
                                 </div>
                             </div>
-                            <div class="layui-btn-container" style="float:right">
-                                <button class="layui-btn layui-btn-normal" data-type="fn_search">查询</button>
-                                <button class="layui-btn" data-type="fn_add">增加</button>
-                                <button class="layui-btn layui-btn-primary" data-type="fn_edit">编辑</button>
-                                <button class="layui-btn layui-btn-danger" data-type="fn_delete">删除</button>
+                            <table class="layui-hide" id="role-table"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 增加表单  -->
+        <div v-show="showForm" class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">{{title}}</div>
+                        <div class="layui-card-body">
+                            <div class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">角色名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" v-model="role.roleName" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-block">
+                                        <textarea placeholder="请输入内容" v-model="role.remark" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">菜单权限</label>
+                                    <div class="layui-input-block">
+                                        <ul id="menuTree" class="ztree"></ul>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" @click="saveOrUpdate">保存</button>
+                                        <button class="layui-btn layui-btn-primary" @click="query">返回</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <table class="layui-hide" id="role-table"></table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<script src="../../../static/layui/layui.js"></script>
 <script src="../../../static/js/role/role.js"></script>
 </body>
 </html>

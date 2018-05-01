@@ -1,11 +1,22 @@
 package com.boot.cloudadmin.common.base;
 
+import com.boot.cloudadmin.common.utils.shiro.ShiroUtils;
+import com.boot.cloudadmin.sys.entity.UserEntity;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BaseController {
+
+    protected UserEntity getUser() {
+        return (UserEntity) ShiroUtils.getSubject().getPrincipal();
+    }
+
+    protected Long getUserId() {
+        return getUser().getUserId();
+    }
 
     public Map<String, Object> getAllParams(HttpServletRequest request){
         Map<String, Object> map = new HashMap<String, Object>();

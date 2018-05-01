@@ -16,7 +16,12 @@
     <select id="queryListByParentId" resultType="com.boot.cloudadmin.sys.entity.MenuEntity">
         select * from t_sys_menu
         where parent_id = #{parentId}
---         and status = 1
+        <!--and status = 1 -->
         order by order_num asc
+    </select>
+
+    <!-- 查询菜单类型 -->
+    <select id="queryNotButtonList" resultType="com.boot.cloudadmin.sys.entity.MenuEntity">
+        select * from t_sys_menu where type != 2 order by order_num asc
     </select>
 </mapper>

@@ -1,43 +1,126 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <title>菜单列表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../static/layui/css/icon.css" media="all">
-    <link rel="stylesheet" href="../static/style/admin.css" media="all">
-
-    <script>
-        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
-    </script>
+    <link rel="stylesheet" href="../../../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../static/layui/css/icon.css" media="all">
+    <link rel="stylesheet" href="../../../static/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../static/plugins/bootstrap/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../../../static/plugins/treegrid/jquery.treegrid.css">
+    <link rel="stylesheet" type="text/css" href="../../../static/plugins/ztree/css/metroStyle/metroStyle.css">
+    <script type="text/javascript" src="../../../static/lib/jquery.min.js"></script>
+    <script src="../../../static/plugins/bootstrap/js/bootstrap-table.min.js"></script>
+    <script src="../../../static/plugins/treegrid/jquery.treegrid.min.js"></script>
+    <script src="../../../static/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+    <script src="../../../static/plugins/treegrid/jquery.treegrid.extension.js"></script>
+    <script src="../../../static/plugins/treegrid/tree.table.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/ztree/jquery.ztree.all.min.js"></script>
 </head>
 <body>
-    <div class="layui-card layadmin-header">
-        <div class="layui-breadcrumb" lay-filter="breadcrumb">
-            <a lay-href="">主页</a>
-            <a><cite>组件</cite></a>
-            <a><cite>数据表格</cite></a>
-            <a><cite>简单用法</cite></a>
+    <div id="menu-list" style="margin-top: 15px">
+        <div v-show="!showForm" class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">菜单列表</div>
+                        <div class="layui-card-body">
+                            <div class="layui-form-item">
+                                <div class="layui-btn-container">
+                                    <button shiro:hasPermission ="sys:user:save,sys:role:select" class="layui-btn" @click="fn_add">增加</button>
+                                    <button shiro:hasAllPermissions="sys:user:update,sys:role:select,sys:user:info" class="layui-btn layui-btn-primary" @click="fn_update">编辑</button>
+                                    <button shiro:hasAllPermissions="sys:user:delete" class="layui-btn layui-btn-danger" @click="fn_delete">删除</button>
+                                </div>
+                            </div>
+                            <table class="layui-hide" id="user-table"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table id="menuTable" data-mobile-responsive="true" data-click-to-select="true">
+                <thead>
+                <tr>
+                    <th data-field="selectItem" data-checkbox="true"></th>
+                </tr>
+                </thead>
+            </table>
         </div>
-    </div>
-
-    <div class="layui-fluid">
-        <div class="layui-row layui-col-space15">
-            <div class="layui-col-md12">
-                <div class="layui-card">
-                    <div class="layui-card-header">菜单列表</div>
-                    <div class="layui-card-body">
-                        <table class="layui-hide" id="test-table-simple"></table>
+        <!-- 增加表单  -->
+        <div v-show="showForm" class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">增加菜单</div>
+                        <div class="layui-card-body">
+                            <form class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">类型</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="type" v-model="menu.type" lay-filter="type" value="0" title="目录">
+                                        <input type="radio" name="type" v-model="menu.type" lay-filter="type" value="1" title="菜单">
+                                        <input type="radio" name="type" v-model="menu.type" lay-filter="type" value="2" title="按钮">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: auto;">菜单名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" lay-verify="required" v-model="menu.name" autocomplete="off" placeholder="菜单名称或按钮名称" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="width: auto;">上级菜单</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" lay-verify="required" style="cursor:pointer;" v-model="menu.parentName" @click="menuTree" readonly="readonly" placeholder="一级菜单" class="layui-input">
+                                    </div>
+                                </div>
+                                <div v-if="menu.type == 1" class="layui-form-item">
+                                    <label class="layui-form-label" style="width: auto;">菜单URL</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" lay-verify="required" v-model="menu.url" autocomplete="off" placeholder="菜单URL" class="layui-input">
+                                    </div>
+                                </div>
+                                <div v-if="menu.type == 1 || menu.type == 2" class="layui-form-item">
+                                    <label class="layui-form-label" style="width: auto;">授权标识</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" v-model="menu.perms" autocomplete="off" placeholder="授权标识" class="layui-input">
+                                    </div>
+                                </div>
+                                <div v-if="menu.type != 2" class="layui-form-item">
+                                    <label class="layui-form-label" style="width: auto;">排序号</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" lay-verify="required" v-model="menu.orderNum" autocomplete="off" placeholder="排序号" class="layui-input">
+                                    </div>
+                                </div>
+                                <div v-if="menu.type != 2" class="layui-form-item">
+                                    <label class="layui-form-label" style="width: auto;">图标</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" lay-verify="required" v-model="menu.icon" autocomplete="off" placeholder="图标" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" @click="saveOrUpdate">保存</button>
+                                        <button class="layui-btn layui-btn-primary" @click="query">返回</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-<script src="../../../static/layui/layui.js"></script>
+    <!-- 选择菜单 -->
+    <div id="menuLayer" style="display: none;padding:10px;">
+        <ul id="menuTree" class="ztree"></ul>
+    </div>
+    <script src="../../../static/lib/vue.min.js"></script>
+    <script src="../../../static/layui/layui.js"></script>
+    <script src="../../../static/js/menu/menu.js"></script>
 </body>
 </html>
 

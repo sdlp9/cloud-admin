@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.boot.cloudadmin.common.validator.group.AddGroup;
 import com.boot.cloudadmin.common.validator.group.UpdateGroup;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -35,11 +36,13 @@ public class UserEntity implements Serializable {
 	 * 密码
 	 */
 	@NotBlank(message="密码不能为空", groups = AddGroup.class)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
 	/**
 	 * 盐
 	 */
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String salt;
 
 	/**

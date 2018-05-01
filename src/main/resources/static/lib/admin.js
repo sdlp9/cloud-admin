@@ -27,7 +27,7 @@ layui.define('view', function(exports){
 
   //通用方法
   ,admin = {
-    v: '1.0.0-beta8 std'
+    v: '1.0.0-beta9 std'
     
     //数据的异步请求
     ,req: view.req
@@ -522,7 +522,7 @@ layui.define('view', function(exports){
     local.theme && admin.theme(local.theme);
     
     //常规版默认开启多标签页
-    if(!('pageTabs' in layui.setter)) layui.setter.pageTabs = true
+    if(!('pageTabs' in layui.setter)) layui.setter.pageTabs = true;
     
     //不开启页面标签时
     if(!setter.pageTabs){

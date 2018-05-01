@@ -29,4 +29,17 @@ public interface MenuDao extends BaseMapper<MenuEntity>{
      * @return
      */
     List<MenuEntity> queryListByParentId(Long parentId);
+
+    /**
+     * 获取菜单和目录类型的菜单列表
+     * @return
+     */
+    List<MenuEntity> queryNotButtonList();
+
+    /**
+     * 查询子菜单
+     * @param parentId
+     * @return
+     */
+    List<MenuEntity> queryListParentId(Long parentId);
 }

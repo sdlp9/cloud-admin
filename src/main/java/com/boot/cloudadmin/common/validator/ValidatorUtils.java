@@ -1,5 +1,7 @@
 package com.boot.cloudadmin.common.validator;
 
+import com.boot.cloudadmin.common.base.R;
+import com.boot.cloudadmin.common.contants.GlobalContants;
 import com.boot.cloudadmin.common.exception.GlobalException;
 
 import javax.validation.ConstraintViolation;
@@ -29,15 +31,15 @@ public class ValidatorUtils {
      * @param groups        待校验的组
      * @throws GlobalException  校验不通过，则报RRException异常
      */
-    public static void validateEntity(Object object, Class<?>... groups)
+    public static R validateEntity(Object object, Class<?>... groups)
             throws GlobalException {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
         if (!constraintViolations.isEmpty()) {
             StringBuilder msg = new StringBuilder();
             for(ConstraintViolation<Object> constraint:  constraintViolations){
-                msg.append(constraint.getMessage()).append("<br>");
+                return R.error(GlobalContants.VALIDATOR_CODE,constraint.getMessage());
             }
-            throw new GlobalException(msg.toString());
         }
+        return R.ok();
     }
 }

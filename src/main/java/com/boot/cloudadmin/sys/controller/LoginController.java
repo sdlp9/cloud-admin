@@ -102,6 +102,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public String logout() {
+        logger.info("退出登录");
         ShiroUtils.logout();
         return "redirect:login.html";
     }

@@ -16,5 +16,11 @@ import java.util.Map;
 public interface IRoleService extends IService<RoleEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void save(RoleEntity roleEntity);
+
+    void update(RoleEntity roleEntity);
+
+    void deleteBatch(Long [] roleIds);
 }
 
