@@ -48,7 +48,7 @@ layui.use(['form', 'table','upload'], function(){
         auto: false,
         multiple: true,//是否允许多文件上传。设置 true即可开启
         accept: 'images',//指定允许上传时校验的文件类型
-        acceptMime: 'image/!*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+        acceptMime: 'image/*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
         exts: 'jpg|png|gif|bmp|jpeg',
         bindAction: '#testListAction',
         before: function(obj){
