@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-05-01 21:14:38
+Date: 2018-05-04 03:07:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,6 +25,7 @@ CREATE TABLE `t_b_attachs` (
   `type` tinyint(2) DEFAULT NULL COMMENT '文件类型',
   `status` tinyint(2) DEFAULT NULL COMMENT '状态 1、可用 2、已删除',
   `file_size` bigint(20) DEFAULT NULL COMMENT '文件大小',
+  `file_path` varchar(500) DEFAULT NULL COMMENT '文件路径',
   `suffix` varchar(5000) DEFAULT NULL COMMENT '文件后缀',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -106,7 +107,7 @@ INSERT INTO `t_b_news` VALUES ('11', '测试修改能', '1', '1', '0', '撒扥�
 INSERT INTO `t_b_news` VALUES ('12', '测试修改成功否', '1', '1', '0', '<p>&nbsp; &nbsp;萨芬东非<strong>赛发动发</strong><strong>阿赛发动安抚</strong><strong>东安抚东安抚</strong><strong>洗澡负债森</strong><strong>撒扥东非</strong><strong>在线崔满您看好</strong><strong>，口橡胶岑拽进动画</strong><strong>sad灵泛灵动案件&amp;nbsp;</strong>\n\n\n &nbsp; &nbsp;<strong>塞阀撒扥</strong> &amp;nbsp;<strong>我的红色字体</strong>\n\n\n &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>上一上车</strong>\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>5端月肉盾</strong>\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>刚均衡</strong>\n &nbsp; &nbsp;</p><p><span style=\"color: rgb(255, 0, 0);\">扥根等</span></p><p>扥个放灯<span style=\"color: rgb(255, 0, 0);\">扥个df放灯fd</span></p><p>dfs该放松g&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p><p><img src=\"http://localhost:8080/moviemanage/viewImage?uuid=21e848e979074a97aa9396362ea48932\" title=\"test\" alt=\"test.jpg\"/></p>', '2018-04-01 17:35:07', '2018-04-02 01:06:39');
 INSERT INTO `t_b_news` VALUES ('13', '测试销毁', '2', '1', '1', '思想扥东方', '2018-04-01 17:40:21', '2018-04-01 17:40:22');
 INSERT INTO `t_b_news` VALUES ('14', '测试销毁', '2', '1', '0', '<p>撒扥领撒扥领翻看领</p><p><img src=\"http://localhost:8080/moviemanage/viewImage?uuid=057d06ef5c364407a4d334bda880c4c7\" title=\"6712\" alt=\"6712.png\"/></p>', '2018-04-01 17:42:08', '2018-04-06 14:19:44');
-INSERT INTO `t_b_news` VALUES ('18', '赛粉丝', '1', '1', '0', '<p>二团热的天&nbsp;</p><p>贵南鬼仓就跟</p><ol class=\" list-paddingleft-2\" style=\"list-style-type: decimal;\"><li><p>小催下扥个</p></li><li><p>方耿芳</p></li></ol><p><img src=\"http://193.112.67.154:8080/viewImage?uuid=9b4c3744072d45c69e503650553afb9e\" title=\"6712\" alt=\"6712.png\"/></p>', '2018-04-06 14:37:24', '2018-04-07 01:26:27');
+INSERT INTO `t_b_news` VALUES ('18', '赛粉丝', '1', '1', '1', '', '2018-04-06 14:37:24', '2018-05-02 00:42:24');
 
 -- ----------------------------
 -- Table structure for t_b_project
@@ -224,8 +225,8 @@ INSERT INTO `t_sys_menu` VALUES ('42', '41', '查看', null, 'sys:member:list,sy
 INSERT INTO `t_sys_menu` VALUES ('43', '41', '新增', null, 'sys:member:save', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('44', '41', '修改', null, 'sys:member:update', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('45', '41', '删除', null, 'sys:member:delete', '2', null, '6', '1');
-INSERT INTO `t_sys_menu` VALUES ('46', '0', '资讯管理', null, null, '0', 'layui-icon layui-icon-zzfilm', '2', '1');
-INSERT INTO `t_sys_menu` VALUES ('47', '46', '新闻资讯', 'modules/news/news.html', null, '1', 'fa  fa-fw fa-newspaper-o', '6', '1');
+INSERT INTO `t_sys_menu` VALUES ('46', '0', '资讯管理', null, null, '0', 'layui-icon layui-icon-znewspaper-l', '2', '1');
+INSERT INTO `t_sys_menu` VALUES ('47', '46', '新闻资讯', '/news/newsList', null, '1', 'layui-icon layui-icon-znewspaper-l', '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('48', '47', '查看', null, 'sys:news:list,sys:news:info', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('49', '47', '新增', null, 'sys:news:save', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('50', '47', '修改', null, 'sys:news:update', '2', null, '6', '1');

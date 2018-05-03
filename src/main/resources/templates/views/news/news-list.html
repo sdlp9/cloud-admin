@@ -74,15 +74,17 @@
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">图片上传</label>
-                                <!--<div class="layui-input-block">
-                                    <button type="button" class="layui-btn" id="test2">多图片上传</button>
-                                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-                                        预览图：
-                                        <div class="layui-upload-list" id="demo2"></div>
-                                    </blockquote>
-                                    <input type="text" v-model="attachIds" value="{{}}">
-                                </div>-->
-                                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                                <div class="layui-input-block">
+                                    <button type="button" class="layui-btn" id="test2">请选择图片</button>
+                                    <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                                    <div class="layui-upload-list">
+                                        <span v-for="pic in picList">
+                                            <img :id="pic.uuid" :src="pic.path" :alt="pic.name" class="layui-upload-img" @click="delete_pic(pic.uuid)" width="100" height="100">
+                                            <!--<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>-->
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
                                 <div class="layui-input-block">
                                     <table class="layui-table">
                                         <thead>
@@ -94,7 +96,7 @@
                                         <tbody id="demoList"></tbody>
                                     </table>
                                     <button type="button" class="layui-btn" id="testListAction">开始上传</button>
-                                </div>
+                                </div>-->
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-input-block">

@@ -56,7 +56,8 @@ public class UploadController extends BaseController {
             /** 获取文件的后缀* */
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
             /** 使用UUID生成文件名称* */
-            String fileName = UUID.randomUUID().toString() + suffix;
+            String uuid = UUID.randomUUID().toString();
+            String fileName = uuid + suffix;
             /** 拼成完整的文件保存路径加文件* */
             String filePath = fullPathFile + File.separator + fileName;
             /** 文件输出流* */
@@ -67,7 +68,7 @@ public class UploadController extends BaseController {
             /** 打印出上传到服务器的文件的本地路径和网络路径* */
             System.out.println("****************" + filePath + "**************");
             System.out.println("/images/" + dateFormat.format(new Date()) + "/" + fileName);
-            return R.ok();
+            return R.ok().put("path","/images/" + dateFormat.format(new Date()) + "/" + fileName).put("fileName",fileName).put("uuid",uuid);
         } catch (Exception e) {
             e.printStackTrace();
             R.error(GlobalContants.UPLOAD_ERROR_CODE,"文件上传错误");

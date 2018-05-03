@@ -40,20 +40,22 @@ layui.use(['form', 'table','upload'], function(){
     form.on('select(type)', function(data){
         vm.news.type = data.value;
     });
-    /*//多图片上传
+    //多图片上传
     upload.render({
         elem: '#test2',
         url: '/upload/',
         method: 'post',
+        auto: false,
         multiple: true,//是否允许多文件上传。设置 true即可开启
         accept: 'images',//指定允许上传时校验的文件类型
         acceptMime: 'image/!*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
         exts: 'jpg|png|gif|bmp|jpeg',
+        bindAction: '#testListAction',
         before: function(obj){
             //预读本地文件示例，不支持ie8
-            obj.preview(function(index, file, result){
-                $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" width="100" height="100">')
-            });
+            /*obj.preview(function(index, file, result){
+                $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" width="100" height="100">');
+            });*/
         },
         allDone: function(obj){ //当文件全部被提交后，才触发
             console.log(obj.total); //得到总文件数
@@ -61,17 +63,24 @@ layui.use(['form', 'table','upload'], function(){
             console.log(obj.aborted); //请求失败的文件数
         },
         done: function(res){
-            //上传完毕
+            var pic ={} ;
+            pic.path = res.path;
+            pic.fileName = res.fileName;
+            pic.uuid = res.uuid;
+            /*$('#demo2').append('<img src="'+ res.path +'" alt="'+ res.fileName +'" class="layui-upload-img" width="100" height="100">');*/
+            vm.picList.push(pic);
         }
-    });*/
-    //多文件列表示例
+    });
+    /*//多文件列表示例
     var demoListView = $('#demoList'),
         uploadListIns = upload.render({
             elem: '#testList',
             url: '/upload/',
-            accept: 'file',
             multiple: true,
             auto: false,
+            accept: 'images',//指定允许上传时校验的文件类型
+            acceptMime: 'image/!*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+            exts: 'jpg|png|gif|bmp|jpeg',
             bindAction: '#testListAction',
             choose: function(obj){
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
@@ -100,6 +109,7 @@ layui.use(['form', 'table','upload'], function(){
                     });
 
                      demoListView.append(tr);
+                     vm.picList[index] = tr;
                 });
             },
             done: function(res, index, upload){
@@ -118,7 +128,7 @@ layui.use(['form', 'table','upload'], function(){
                 tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
                 tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
-        });
+        });*/
     });
 var vm = new Vue({
     el:'#news-html',
@@ -128,7 +138,8 @@ var vm = new Vue({
         },
         title: '资讯列表',
         showForm: false,
-        news: {}
+        news: {},
+        picList: []
     },
     updated: function(){
         layui.form.render();
@@ -148,6 +159,7 @@ var vm = new Vue({
         fn_add : function () {
             vm.title = '资讯增加';
             vm.news = {};
+            vm.picList = [];
             vm.showForm = true;
         },
         fn_update : function () {
@@ -227,6 +239,9 @@ var vm = new Vue({
         //判断是否为空
         isBlank: function (value) {
             return !value || !/\S/.test(value)
+        },
+        delete_pic: function (uuid) {
+            layui.$("#"+uuid).remove();
         },
         validator: function () {
             if(vm.isBlank(vm.news.title)){

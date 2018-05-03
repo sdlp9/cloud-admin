@@ -30,9 +30,12 @@ spring:
     suffix: .html
     encoding: UTF-8
     cache: false
-
   mvc:
     static-path-pattern: /static/**
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
 
 cloud-admin:
     redis:
