@@ -64,7 +64,14 @@ public class GlobalContants {
     /** 登录失败 **/
     public static final int LOGIN_FAIL = 601;
 
+    /** 验证码错误 **/
     public static final int VALIDATOR_CODE = 602;
+
+    /** 参数错误 **/
+    public static final int PAEAMS_ERROR_CODE = 603;
+
+    /** 文件上传错误 **/
+    public static final int UPLOAD_ERROR_CODE = 700;
 
     /**
      * 菜单类型

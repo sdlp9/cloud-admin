@@ -115,7 +115,7 @@
                 //请求前的处理
             },
             success:function(req){
-                if(req.code == 500){
+                if(req.code === 500){
                     layer.msg(req.msg);
                     $("#captcha").attr('src','captcha.jpg?t='+ new Date().getTime());
                 }else{
@@ -124,6 +124,12 @@
                 }
             }
         });
+    });
+    //更换图形验证码
+    $("#captcha").on('click',function(){
+        var othis = $(this);
+        console.log("captcha");
+        this.src = 'captcha.jpg?t='+ new Date().getTime()
     });
     
   });

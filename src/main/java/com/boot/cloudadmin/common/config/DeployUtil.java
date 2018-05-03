@@ -28,4 +28,6 @@ public class DeployUtil {
     private String ossflag;
 
     private String viewurl;
+
+    private String imgPath;
 }
