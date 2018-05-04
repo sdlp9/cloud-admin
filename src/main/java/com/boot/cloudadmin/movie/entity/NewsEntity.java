@@ -1,5 +1,6 @@
 package com.boot.cloudadmin.movie.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Getter;
@@ -47,4 +48,10 @@ public class NewsEntity implements Serializable {
      * 更新时间
      */
     private Timestamp updateTime;
+
+    /**
+     * 关联附件id
+     */
+    @TableField(exist=false)
+    private String attachId;
 }

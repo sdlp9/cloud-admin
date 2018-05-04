@@ -10,6 +10,8 @@ import com.boot.cloudadmin.common.validator.group.UpdateGroup;
 import com.boot.cloudadmin.movie.entity.NewsEntity;
 import com.boot.cloudadmin.movie.service.INewsService;
 import com.boot.cloudadmin.sys.entity.UserEntity;
+import com.boot.cloudadmin.sys.service.IAttachsService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +37,9 @@ public class NewsController extends BaseController {
 
     @Autowired
     private INewsService iNewsService;
+
+    @Autowired
+    private IAttachsService attachsService;
 
     @RequestMapping("/newsList")
     public ModelAndView newsList(){
@@ -81,7 +87,6 @@ public class NewsController extends BaseController {
             return r;
         }
         iNewsService.save(news);
-
         return R.ok();
     }
 

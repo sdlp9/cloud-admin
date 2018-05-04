@@ -40,7 +40,7 @@ public class IndexController extends BaseController {
         logger.info("菜单列表：====" + menuList.toString());
         //List<String> permissions = menuService.getUserPermissions(user.getUserId());
 
-        ModelAndView modelAndView = new ModelAndView("/index");
+        ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("user",user);
         modelAndView.addObject("menuList",menuList);
         //modelAndView.addObject("permissions",permissions);

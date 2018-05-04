@@ -46,6 +46,7 @@ layui.use(['form', 'table','upload'], function(){
         url: '/upload/',
         method: 'post',
         auto: false,
+        data: {attach_type: '1'},//附件关联类型
         multiple: true,//是否允许多文件上传。设置 true即可开启
         accept: 'images',//指定允许上传时校验的文件类型
         acceptMime: 'image/*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
@@ -58,15 +59,15 @@ layui.use(['form', 'table','upload'], function(){
             });*/
         },
         allDone: function(obj){ //当文件全部被提交后，才触发
-            console.log(obj.total); //得到总文件数
-            console.log(obj.successful); //请求成功的文件数
-            console.log(obj.aborted); //请求失败的文件数
+            //console.log(obj.total); //得到总文件数
+            //console.log(obj.successful); //请求成功的文件数
+            //console.log(obj.aborted); //请求失败的文件数
         },
         done: function(res){
             var pic ={} ;
-            pic.path = res.path;
-            pic.fileName = res.fileName;
-            pic.uuid = res.uuid;
+            pic.filePath = res.path;
+            pic.name = res.fileName;
+            pic.id = res.attachId;
             /*$('#demo2').append('<img src="'+ res.path +'" alt="'+ res.fileName +'" class="layui-upload-img" width="100" height="100">');*/
             vm.picList.push(pic);
         }
@@ -175,6 +176,9 @@ var vm = new Vue({
                 return false;
             }
             vm.getNews(data[0].id);
+            vm.picList = [];
+            //获取图片附件
+            vm.getAttachs(data[0].id,1);
             vm.showForm = true;
         },
         query: function () {
@@ -186,6 +190,14 @@ var vm = new Vue({
             if(vm.validator()){
                 return ;
             }
+            var attachId = '';
+            /*for (var i = 0; i < vm.picList.length; i++) {
+                attachId = attachId + vm.picList[i].attachId + ",";
+            }*/
+            layui.$.each(vm.picList, function(index, item) {
+                attachId = attachId + item.id + ",";
+            });
+            vm.news.attachId = attachId;
             layui.$.ajax({
                 type: "POST",
                 url: url,
@@ -193,6 +205,7 @@ var vm = new Vue({
                 data: JSON.stringify(vm.news),
                 success: function(r){
                     if(r.code === 0){
+                        //入库成功，
                         layui.layer.msg('操作成功', {icon: 1});
                         vm.query();
                     }else{
@@ -215,6 +228,7 @@ var vm = new Vue({
                 layui.$.each(data, function(index, item) {
                     ids.push(item.id);
                 });
+                console.log(ids)
                 layui.$.ajax({
                     type: "POST",
                     url: "/news/deleteByIds",
@@ -236,12 +250,69 @@ var vm = new Vue({
                 vm.news = r.news;
             });
         },
+        getAttachs: function (newsId,attachType) {
+            var params = {
+                relId:newsId,
+                attachType:attachType
+            };
+            layui.$.ajax({
+                type: "POST",
+                url: "/attachs/getAttachsList",
+                contentType: "application/json",
+                data: JSON.stringify(params),
+                success: function(r){
+                    if(r.code === 0){
+                        var list = r.list;
+                        layui.$.each(list, function(index, item) {
+                            var pic ={} ;
+                            pic.filePath = item.filePath;
+                            pic.name = item.name;
+                            pic.id = item.id;
+                            vm.picList.push(pic);
+                        });
+                        /*for(var i = 0;i<list.length;i++){
+                            var pic ={} ;
+                            pic.filePath = list[i].filePath;
+                            pic.name = list[i].name;
+                            pic.id = list[i].id;
+                            vm.picList.push(pic);
+                        }*/
+                    }else{
+                        layui.layer.msg(r.msg);
+                    }
+                }
+            });
+        },
         //判断是否为空
         isBlank: function (value) {
             return !value || !/\S/.test(value)
         },
-        delete_pic: function (uuid) {
-            layui.$("#"+uuid).remove();
+        delete_pic: function (id) {
+            layui.$("#"+id).remove();
+            /*for (var i = 0; i < vm.picList.length; i++) {
+                if (vm.picList[i].attachId === id){
+                    vm.picList.splice(i, 1);
+                }
+            }*/
+            layui.$.each(vm.picList, function(index, item) {
+                if (item.attachId === id){
+                    vm.picList.splice(i, 1);
+                }
+            });
+            var url = '/attachs/deleteById';
+            layui.$.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/json",
+                data: JSON.stringify(id),
+                success: function(r){
+                    if(r.code === 0){
+                        layui.layer.msg('删除成功', {icon: 1});
+                    }else{
+                        layui.layer.msg(r.msg);
+                    }
+                }
+            });
         },
         validator: function () {
             if(vm.isBlank(vm.news.title)){
@@ -252,7 +323,6 @@ var vm = new Vue({
                 layui.layer.msg("资讯类型不能为空");
                 return true;
             }
-            console.log(vm.news.showFlag);
             if(vm.isBlank(vm.news.showFlag)){
                 layui.layer.msg("显示与否不能为空");
                 return true;
