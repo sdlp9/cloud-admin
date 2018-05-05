@@ -19,15 +19,23 @@ public class DeployUtil {
 
     private String uploadHost;
 
-    private String imgbucket;
-
-    private String filebucket;
-
-    private String videobucket;
+    private String bucket;
 
     private String ossflag;
 
     private String viewurl;
 
     private String imgPath;
+
+    private String key;
+
+    private String secret;
+
+    private String ossurl;
+
+    private String imagebucket;
+
+    private String filebucket;
+
+    private String videobucket;
 }

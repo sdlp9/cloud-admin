@@ -4,6 +4,8 @@ import com.boot.cloudadmin.common.base.BaseController;
 import com.boot.cloudadmin.common.base.R;
 import com.boot.cloudadmin.common.config.DeployUtil;
 import com.boot.cloudadmin.common.contants.GlobalContants;
+import com.boot.cloudadmin.common.oss.OSSFactory;
+import com.boot.cloudadmin.common.oss.QiniuCloudStorageService;
 import com.boot.cloudadmin.sys.entity.AttachsEntity;
 import com.boot.cloudadmin.sys.service.IAttachsService;
 import org.slf4j.Logger;
@@ -38,9 +40,36 @@ public class UploadController extends BaseController {
     @Autowired
     private IAttachsService attachsService;
 
+    private QiniuCloudStorageService qiniuCloudStorageService;
+
+
     @Autowired
     public UploadController(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
+    }
+
+    /**
+     * 上传文件至七牛
+     * @param file
+     * @param request
+     * @return
+     */
+    @RequestMapping("/uploadFileQiNiu")
+    public R uploadQiNiu(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+
+        try {
+            qiniuCloudStorageService = (QiniuCloudStorageService) OSSFactory.build(deployUtil);
+            /** 获取文件的后缀* */
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            String key = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
+
+            String url = qiniuCloudStorageService.upload(file.getBytes(),deployUtil.getImagebucket() + key);
+            logger.info("上传结果url-->" + url);
+            return R.ok().put("url",url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
     }
 
     @RequestMapping("/upload")
