@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../static/layui/css/icon.css" media="all">
+</head>
+<body>
+<div id="project-html" style="margin-top: 15px">
+    <div v-show="!showForm" class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">{{title}}</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">项目名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="q.projectName" autocomplete="off" placeholder="请输入项目名称" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-btn-container" style="float:right">
+                                <button shiro:hasAllPermissions="sys:user:list,sys:user:info" class="layui-btn layui-btn-normal" @click="query">查询</button>
+                                <button shiro:hasPermission ="sys:user:save,sys:role:select" class="layui-btn" @click="fn_add">增加</button>
+                                <button shiro:hasAllPermissions="sys:user:update,sys:role:select,sys:user:info" class="layui-btn layui-btn-primary" @click="fn_update">编辑</button>
+                                <button shiro:hasAllPermissions="sys:user:delete" class="layui-btn layui-btn-danger" @click="fn_delete">删除</button>
+
+                                <button shiro:hasAllPermissions="sys:user:delete" class="layui-btn layui-btn-warm" @click="fn_approval">提审</button>
+                                <button shiro:hasAllPermissions="sys:user:delete" class="layui-btn" @click="fn_publish">发布/下架</button>
+                            </div>
+                        </div>
+                        <table class="layui-hide" id="project-table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 增加表单  -->
+    <div v-show="showForm" class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">{{title}}</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.projectName" autocomplete="off" placeholder="项目名称" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目成本</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.projectCost" autocomplete="off" placeholder="项目成本" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目发起人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.projectHeader" autocomplete="off" placeholder="项目发起人" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">筹资金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.financingMoney" autocomplete="off" placeholder="筹资金额" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">开始时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.startTime" id="projectStartTime" autocomplete="off" placeholder="投资开始时间" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">结束时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.endTime" id="projectEndTime" autocomplete="off" placeholder="投资结束时间" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目标签</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.projectLabel" autocomplete="off" placeholder="永久版权 永久福利等" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目服务费</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="project.projectCoverCharge" autocomplete="off" placeholder="项目服务费" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目类型</label>
+                                    <div class="layui-input-inline">
+                                        <select v-model="project.projectType" lay-filter="projectType">
+                                            <option value=""></option>
+                                            <option value="1" selected="">网络电影</option>
+                                            <option value="2">院线电影</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目状态</label>
+                                    <div class="layui-input-inline">
+                                        <select v-model="project.projectStatus" lay-filter="projectStatus">
+                                            <option value=""></option>
+                                            <option value="1" selected="">即将上线</option>
+                                            <option value="2">正在募集</option>
+                                            <option value="3">募集完成</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">推送首页</label>
+                                    <div class="layui-input-inline">
+                                        <select v-model="project.indexFlag" lay-filter="indexFlag">
+                                            <option value=""></option>
+                                            <option value="1" selected="">是</option>
+                                            <option value="2">否</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">视频上传</label>
+                                    <div class="layui-input-inline">
+                                        <button type="button" class="layui-btn" id="test5"><i class="layui-icon"></i>上传视频</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">视频地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" v-model="project.projectVideo" readonly autocomplete="off" placeholder="项目视频地址" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">项目介绍</label>
+                                <div class="layui-input-block">
+                                    <textarea id="content"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">图片上传</label>
+                                <div class="layui-input-block">
+                                    <button type="button" class="layui-btn" id="test2">请选择图片</button>
+                                    <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                                    <div class="layui-upload-list">
+                                        <span v-for="pic in picList">
+                                            <img :id="pic.id" :src="pic.filePath" :alt="pic.name" class="layui-upload-img" @click="delete_pic(pic.id)" width="100" height="100">
+                                            <!--<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>-->
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" @click="saveOrUpdate">保存</button>
+                                    <button class="layui-btn layui-btn-primary" @click="query">返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../../static/lib/vue.js"></script>
+<script src="../../../static/layui/layui.js"></script>
+<script src="../../../static/js/project/project.js"></script>
+</body>
+</html>

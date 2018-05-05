@@ -40,20 +40,13 @@ public class NewsServiceImpl extends ServiceImpl<NewsDao,NewsEntity> implements 
     @Override
     public void save(NewsEntity newsEntity) {
         this.baseMapper.insert(newsEntity);
-        if(StringUtils.isNotBlank(newsEntity.getAttachId())){
-            String [] ids = newsEntity.getAttachId().split(",");
-            for (int i = 0;i<ids.length;i++){
-                Map<String,Object> params = new HashMap<String,Object>();
-                params.put("relId",newsEntity.getId());
-                params.put("id",ids[i]);
-                attachsDao.updateRelId(params);
-            }
-        }
+        updateAttachRel(newsEntity);
     }
 
     @Override
     public void update(NewsEntity newsEntity) {
         this.baseMapper.updateById(newsEntity);
+        updateAttachRel(newsEntity);
     }
 
     @Override
@@ -64,6 +57,22 @@ public class NewsServiceImpl extends ServiceImpl<NewsDao,NewsEntity> implements 
             attachsDao.delete(new EntityWrapper<AttachsEntity>()
                     .eq("rel_id",newsId)
             );
+        }
+    }
+
+    /**
+     * 更新附件的关联id
+     * @param newsEntity
+     */
+    public void updateAttachRel(NewsEntity newsEntity){
+        if(StringUtils.isNotBlank(newsEntity.getAttachId())){
+            String [] ids = newsEntity.getAttachId().split(",");
+            for (int i = 0;i<ids.length;i++){
+                Map<String,Object> params = new HashMap<String,Object>();
+                params.put("relId",newsEntity.getId());
+                params.put("id",ids[i]);
+                attachsDao.updateRelId(params);
+            }
         }
     }
 }

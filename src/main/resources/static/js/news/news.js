@@ -1,8 +1,11 @@
-layui.use(['form', 'table','upload'], function(){
+var contentEdit;
+var layedit;
+layui.use(['form', 'table','upload','layedit'], function(){
     var form = layui.form,
         table = layui.table,
         upload = layui.upload,
         $ = layui.$;
+    layedit = layui.layedit;
     table.render({
         elem: '#news-table',
         url: '/news/list',
@@ -72,65 +75,13 @@ layui.use(['form', 'table','upload'], function(){
             vm.picList.push(pic);
         }
     });
-    /*//多文件列表示例
-    var demoListView = $('#demoList'),
-        uploadListIns = upload.render({
-            elem: '#testList',
-            url: '/upload/',
-            multiple: true,
-            auto: false,
-            accept: 'images',//指定允许上传时校验的文件类型
-            acceptMime: 'image/!*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
-            exts: 'jpg|png|gif|bmp|jpeg',
-            bindAction: '#testListAction',
-            choose: function(obj){
-                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                //读取本地文件
-                obj.preview(function(index, file, result){
-                    var tr = $(['<tr id="upload-'+ index +'">'
-                        ,'<td>'+ file.name +'</td>'
-                        ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-                        ,'<td>等待上传</td>'
-                        ,'<td>'
-                        ,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
-                        ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
-                        ,'</td>'
-                        ,'</tr>'].join(''));
-
-                    //单个重传
-                    tr.find('.demo-reload').on('click', function(){
-                        obj.upload(index, file);
-                    });
-
-                    //删除
-                    tr.find('.demo-delete').on('click', function(){
-                        delete files[index]; //删除对应的文件
-                        tr.remove();
-                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                    });
-
-                     demoListView.append(tr);
-                     vm.picList[index] = tr;
-                });
-            },
-            done: function(res, index, upload){
-                if(res.code === 0){ //上传成功
-                    var tr = demoListView.find('tr#upload-'+ index)
-                        ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                    //tds.eq(3).html(''); //清空操作
-                    return delete this.files[index]; //删除文件队列已经上传成功的文件
-                }
-                this.error(index, upload);
-            },
-            error: function(index, upload){
-                var tr = demoListView.find('tr#upload-'+ index)
-                    ,tds = tr.children();
-                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
-            }
-        });*/
+    layedit.set({
+        uploadImage: {
+            url: '/editUpload/',
+            type: 'post'
+        }
     });
+});
 var vm = new Vue({
     el:'#news-html',
     data:{
@@ -161,6 +112,8 @@ var vm = new Vue({
             vm.title = '资讯增加';
             vm.news = {};
             vm.picList = [];
+            contentEdit = layedit.build('content');
+            layedit.setContent(contentEdit, null);
             vm.showForm = true;
         },
         fn_update : function () {
@@ -191,9 +144,6 @@ var vm = new Vue({
                 return ;
             }
             var attachId = '';
-            /*for (var i = 0; i < vm.picList.length; i++) {
-                attachId = attachId + vm.picList[i].attachId + ",";
-            }*/
             layui.$.each(vm.picList, function(index, item) {
                 attachId = attachId + item.id + ",";
             });
@@ -201,8 +151,15 @@ var vm = new Vue({
             layui.$.ajax({
                 type: "POST",
                 url: url,
-                contentType: "application/json",
-                data: JSON.stringify(vm.news),
+                data: {
+                    id: vm.news.id,
+                    title: vm.news.title,
+                    type: vm.news.type,
+                    content: layedit.getContent(contentEdit),
+                    showFlag: vm.news.showFlag,
+                    attachId: vm.news.attachId
+                },
+                //data: JSON.stringify(vm.news),
                 success: function(r){
                     if(r.code === 0){
                         //入库成功，
@@ -228,7 +185,6 @@ var vm = new Vue({
                 layui.$.each(data, function(index, item) {
                     ids.push(item.id);
                 });
-                console.log(ids)
                 layui.$.ajax({
                     type: "POST",
                     url: "/news/deleteByIds",
@@ -248,7 +204,10 @@ var vm = new Vue({
         getNews: function(id){
             layui.$.get("/news/info/"+id, function(r){
                 vm.news = r.news;
+
+                layedit.setContent(contentEdit, vm.news.content);
             });
+            contentEdit = layedit.build('content');
         },
         getAttachs: function (newsId,attachType) {
             var params = {

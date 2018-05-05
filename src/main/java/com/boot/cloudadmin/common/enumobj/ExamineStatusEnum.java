@@ -1,19 +1,20 @@
 package com.boot.cloudadmin.common.enumobj;
 
 /**
- * 数据状态
+ * 附件类型enum
  */
-public enum DataStatusEnum {
-
-    //数据状态 1、正常 2、
-    OK(1,"1状态"),
-    OTHERS(2,"2状态");
+public enum ExamineStatusEnum {
+    //审核状态 1、新建 2、已提交未审核 3 驳回 4 审核通过
+    CREATE(1,"未提审"),
+    SUBMIT(2,"已提交未审核"),
+    GOBACK(3,"驳回"),
+    EXAMINEOK(4,"审核通过");
 
     private int value;
 
     private String valueInFact;
 
-    DataStatusEnum(int value, String valueInFact) {
+    ExamineStatusEnum(int value, String valueInFact) {
         this.value = value;
         this.valueInFact = valueInFact;
     }
@@ -24,10 +25,10 @@ public enum DataStatusEnum {
      * @param value 需要匹配的属性值
      * @return
      */
-    public static DataStatusEnum convertByValue(Integer value){
-        for (DataStatusEnum dataEnum: DataStatusEnum.values()) {
-            if (dataEnum.getValue() == value) {
-                return dataEnum;
+    public static ExamineStatusEnum convertByValue(Integer value){
+        for (ExamineStatusEnum attachTypeEnum: ExamineStatusEnum.values()) {
+            if (attachTypeEnum.getValue() == value) {
+                return attachTypeEnum;
             }
         }
         return null;

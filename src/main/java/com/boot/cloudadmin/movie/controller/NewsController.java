@@ -7,6 +7,7 @@ import com.boot.cloudadmin.common.base.R;
 import com.boot.cloudadmin.common.validator.ValidatorUtils;
 import com.boot.cloudadmin.common.validator.group.AddGroup;
 import com.boot.cloudadmin.common.validator.group.UpdateGroup;
+import com.boot.cloudadmin.common.xss.XssHttpServletRequestWrapper;
 import com.boot.cloudadmin.movie.entity.NewsEntity;
 import com.boot.cloudadmin.movie.service.INewsService;
 import com.boot.cloudadmin.sys.entity.UserEntity;
@@ -80,30 +81,52 @@ public class NewsController extends BaseController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:news:save")
     @ResponseBody
-    public R save(@RequestBody NewsEntity news){
-        logger.info("保存资讯信息：params：user ---> " + news.toString());
-        R r = ValidatorUtils.validateEntity(news, AddGroup.class);
-        if(!r.get("code").toString().equals("0")){
-            return r;
-        }
+    public R save(HttpServletRequest request){
+        HttpServletRequest orgRequest = XssHttpServletRequestWrapper.getOrgRequest(request);
+        String title = orgRequest.getParameter("title");
+        String content = orgRequest.getParameter("content");
+        String type = orgRequest.getParameter("type");
+        String showFlag = orgRequest.getParameter("showFlag");
+        String attachId = orgRequest.getParameter("attachId");
+        /**id: vm.news.id,
+         title: vm.news.title,
+         type: vm.news.type,
+         content: layedit.getContent(contentEdit),
+         showFlag: vm.news.showFlag
+         */
+        logger.info("保存资讯信息：params：title ---> " + title + ", content: " + content + ", type: " + type + ", showFlag: " + showFlag);
+        NewsEntity news = new NewsEntity();
+        news.setContent(content);
+        news.setShowFlag(Integer.parseInt(showFlag));
+        news.setTitle(title);
+        news.setType(Integer.parseInt(type));
+        news.setAttachId(attachId);
         iNewsService.save(news);
         return R.ok();
     }
 
     /**
      * 更新资讯
-     * @param news
+     * @param request
      * @return
      */
     @ResponseBody
     @RequestMapping("/update")
     @RequiresPermissions("sys:news:update")
-    public R updateNews(@RequestBody NewsEntity news){
-        logger.info("更新资讯信息：params：news ---> " + news.toString());
-        R r = ValidatorUtils.validateEntity(news, UpdateGroup.class);
-        if(!r.get("code").toString().equals("0")){
-            return r;
-        }
+    public R updateNews(HttpServletRequest request){
+        HttpServletRequest orgRequest = XssHttpServletRequestWrapper.getOrgRequest(request);
+        String id = orgRequest.getParameter("id");
+        String title = orgRequest.getParameter("title");
+        String content = orgRequest.getParameter("content");
+        String type = orgRequest.getParameter("type");
+        String showFlag = orgRequest.getParameter("showFlag");
+        logger.info("修改资讯信息：params : id --->" + id + ", title ---> " + title + ", content--->" + content + ", type--->" + type + ", showFlag--->" + showFlag);
+        NewsEntity news = new NewsEntity();
+        news.setId(Long.valueOf(id));
+        news.setContent(content);
+        news.setShowFlag(Integer.parseInt(showFlag));
+        news.setTitle(title);
+        news.setType(Integer.parseInt(type));
         iNewsService.update(news);
 
         return R.ok();
