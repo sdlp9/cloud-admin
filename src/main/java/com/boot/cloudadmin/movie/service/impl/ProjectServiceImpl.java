@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.boot.cloudadmin.common.base.PageUtils;
 import com.boot.cloudadmin.common.base.Query;
+import com.boot.cloudadmin.common.enumobj.DataStatusEnum;
 import com.boot.cloudadmin.movie.dao.ProjectDao;
 import com.boot.cloudadmin.movie.entity.NewsEntity;
 import com.boot.cloudadmin.movie.entity.ProjectEntity;
@@ -33,6 +34,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
         EntityWrapper<ProjectEntity> wrapper = new EntityWrapper<ProjectEntity>();
         if(params.containsKey("projectName")){
             wrapper.like("project_name",params.get("projectName").toString());
+        }
+        if(params.containsKey("isExmain")){
+            wrapper.eq("examine_status", DataStatusEnum.OTHERS.getValue());
         }
         Page<ProjectEntity> page = this.selectPage(
                 new Query<ProjectEntity>(params).getPage(),wrapper);

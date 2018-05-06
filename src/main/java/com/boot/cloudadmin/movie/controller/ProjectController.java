@@ -52,6 +52,12 @@ public class ProjectController extends BaseController{
         return new ModelAndView("views/project/project-list");
     }
 
+    @RequestMapping("/approvalList")
+    public ModelAndView approvalList(){
+        logger.info("项目审核列表跳转 --->");
+        return new ModelAndView("views/project/project-approval");
+    }
+
     /**
      * 获取列表
      * @param request
@@ -62,6 +68,22 @@ public class ProjectController extends BaseController{
     public R proList(HttpServletRequest request){
         Map<String,Object> params = this.getAllParams(request);
         logger.info("获取项目列表---> params: " + params.toString());
+        PageUtils page = projectService.queryPage(params);
+        return R.ok().put("count",page.getTotalCount()).put("data",page.getList());
+    }
+
+    /**
+     * 获取审核列表
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/examinelist")
+//    @RequiresPermissions("sys:project:save")
+    public R examinelist(HttpServletRequest request){
+        Map<String,Object> params = this.getAllParams(request);
+        params.put("isExmain","yes");
+        logger.info("获取项目审核列表---> params: " + params.toString());
         PageUtils page = projectService.queryPage(params);
         return R.ok().put("count",page.getTotalCount()).put("data",page.getList());
     }
@@ -261,5 +283,26 @@ public class ProjectController extends BaseController{
             projectService.updateByMap(params);
             return R.ok();
         }
+    }
+
+    /**
+     * 项目审核
+     * @param approvalForm
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/examine")
+    //@RequiresPermissions("project:project:approval")
+    public R examineProject(@RequestBody ApprovalForm approvalForm){
+        R r = ValidatorUtils.validateEntity(approvalForm);
+        if(!r.get("code").toString().equals("0")){
+            return r;
+        }
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("id",approvalForm.getId());
+        params.put("examineStatus",approvalForm.getExamineStatus());
+        params.put("remark",approvalForm.getRemark());
+        projectService.updateByMap(params);
+        return R.ok();
     }
 }

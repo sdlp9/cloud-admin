@@ -19,8 +19,6 @@ public class DeployUtil {
 
     private String uploadHost;
 
-    private String bucket;
-
     private String ossflag;
 
     private String viewurl;
@@ -31,7 +29,11 @@ public class DeployUtil {
 
     private String secret;
 
-    private String ossurl;
+    private String filesurl;
+
+    private String imageurl;
+
+    private String videourl;
 
     private String imagebucket;
 

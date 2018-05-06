@@ -46,7 +46,7 @@ layui.use(['form', 'table','upload','layedit'], function(){
     //多图片上传
     upload.render({
         elem: '#test2',
-        url: '/upload/',
+        url: '/uploadQiNiu/',
         method: 'post',
         auto: false,
         data: {attach_type: '1'},//附件关联类型

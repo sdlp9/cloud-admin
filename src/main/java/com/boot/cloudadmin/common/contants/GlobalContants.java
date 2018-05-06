@@ -73,6 +73,7 @@ public class GlobalContants {
     /** 文件上传错误 **/
     public static final int UPLOAD_ERROR_CODE = 700;
 
+
     /**
      * 菜单类型
      *

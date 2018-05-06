@@ -1,9 +1,11 @@
 package com.boot.cloudadmin.sys.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.boot.cloudadmin.common.base.BaseController;
 import com.boot.cloudadmin.common.base.R;
 import com.boot.cloudadmin.common.config.DeployUtil;
 import com.boot.cloudadmin.common.contants.GlobalContants;
+import com.boot.cloudadmin.common.enumobj.OssTypeEnum;
 import com.boot.cloudadmin.common.oss.OSSFactory;
 import com.boot.cloudadmin.common.oss.QiniuCloudStorageService;
 import com.boot.cloudadmin.sys.entity.AttachsEntity;
@@ -54,25 +56,41 @@ public class UploadController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping("/uploadFileQiNiu")
+    @RequestMapping("/uploadQiNiu")
     public R uploadQiNiu(@RequestParam("file") MultipartFile file, HttpServletRequest request){
-
+        Map<String,Object> params = this.getAllParams(request);
+        logger.info(file.getOriginalFilename()+ "=======" +file.getContentType() + file.getName() + "=====" + file.getSize() + "params:--> " + params.toString());
+        if (file.isEmpty()) {
+            return R.error(GlobalContants.PAEAMS_ERROR_CODE,"上传文件不能为空");
+        }
         try {
-            qiniuCloudStorageService = (QiniuCloudStorageService) OSSFactory.build(deployUtil);
             /** 获取文件的后缀* */
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
             String key = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
+            String result = OSSFactory.build(deployUtil).uploadFile(file.getInputStream(),deployUtil.getImagebucket(),key);
+            //result {"hash":"FqmAZEkGflqUF8XQaTW-QySnb5hy","key":"images/9790287b26c140d491124e14b2c8ed17.png"}
+            String url = OSSFactory.build(deployUtil).getFileAccessUrl(key, OssTypeEnum.IMAGESURL.getValue());
+            JSONObject json = JSONObject.parseObject(result);
 
-            String url = qiniuCloudStorageService.upload(file.getBytes(),deployUtil.getImagebucket() + key);
-            logger.info("上传结果url-->" + url);
-            return R.ok().put("url",url);
+            /** 入附件库 **/
+            AttachsEntity attachsEntity = new AttachsEntity();
+            attachsEntity.setName(file.getOriginalFilename());
+            attachsEntity.setFileSize(file.getSize());
+            attachsEntity.setFilePath(url);
+            attachsEntity.setSuffix(suffix);
+            attachsEntity.setType(file.getContentType());
+            attachsEntity.setAttachType(Integer.parseInt(params.get("attach_type").toString()));
+            attachsService.insert(attachsEntity);
+
+            logger.info("上传结果url-->" + deployUtil.getImageurl() + json.getString("key") + "===" + url);
+            return R.ok().put("path",url).put("fileName",file.getOriginalFilename()).put("attachId",attachsEntity.getId());
         } catch (Exception e) {
             e.printStackTrace();
             return R.error();
         }
     }
 
-    @RequestMapping("/upload")
+    @RequestMapping("/uploadLocal")
     public R uploadPic(@RequestParam("file") MultipartFile file, HttpServletRequest request){
         Map<String,Object> params = this.getAllParams(request);
         logger.info(file.getOriginalFilename()+ "=======" +file.getContentType() + file.getName() + "=====" + file.getSize() + "params:--> " + params.toString());
@@ -115,9 +133,31 @@ public class UploadController extends BaseController {
             return R.ok().put("path","/images/" + dateFormat.format(new Date()) + "/" + fileName).put("fileName",fileName).put("uuid",uuid).put("attachId",attachsEntity.getId());
         } catch (Exception e) {
             e.printStackTrace();
-            R.error(GlobalContants.UPLOAD_ERROR_CODE,"文件上传错误");
+            return R.error(GlobalContants.UPLOAD_ERROR_CODE,"文件上传错误");
         }
-        return R.ok();
+    }
+
+    @RequestMapping("/editUploadQiNiu")
+    public R edieUploadQiNi(@RequestParam("file") MultipartFile file){
+        logger.info(file.getOriginalFilename()+ "=======" +file.getContentType() + file.getName() + "=====" + file.getSize());
+        if (file.isEmpty()) {
+            return R.error(GlobalContants.PAEAMS_ERROR_CODE,"上传文件不能为空");
+        }
+        try {
+            /** 获取文件的后缀* */
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            String key = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
+            String result = OSSFactory.build(deployUtil).uploadFile(file.getInputStream(),deployUtil.getImagebucket(),key);
+            //result {"hash":"FqmAZEkGflqUF8XQaTW-QySnb5hy","key":"images/9790287b26c140d491124e14b2c8ed17.png"}
+            String url = OSSFactory.build(deployUtil).getFileAccessUrl(key, OssTypeEnum.IMAGESURL.getValue());
+            Map<String,Object> data = new HashMap<String,Object>();
+            data.put("src",url);
+            data.put("title",file.getOriginalFilename());
+            return R.ok().put("data",data);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(GlobalContants.UPLOAD_ERROR_CODE,"文件上传错误");
+        }
     }
 
     /**
@@ -125,7 +165,7 @@ public class UploadController extends BaseController {
      * @param file
      * @return
      */
-    @RequestMapping("/editUpload")
+    @RequestMapping("/editUploadLocal")
     public R editUpload(@RequestParam("file") MultipartFile file){
         logger.info(file.getOriginalFilename()+ "=======" +file.getContentType() + file.getName() + "=====" + file.getSize());
         if (file.isEmpty()) {

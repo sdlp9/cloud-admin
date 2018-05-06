@@ -8,6 +8,12 @@ public final class OSSFactory {
         if(deployUtil.getOssflag().equals("1")){
             return new QiniuCloudStorageService(deployUtil);
         }
+        /*else if(deployUtil.getOssflag().equals("2")){
+            return new AliyunCloudStorageService(deployUtil);
+        }else if(deployUtil.getOssflag().equals("3")){
+            return new QcloudCloudStorageService(deployUtil);
+        }*/
+
         return null;
     }
 }

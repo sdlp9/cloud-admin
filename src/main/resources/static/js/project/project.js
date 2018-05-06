@@ -95,7 +95,7 @@ layui.use(['form', 'table','upload','layedit', 'laydate'], function(){
     //多图片上传
     upload.render({
         elem: '#test2',
-        url: '/upload/',
+        url: '/uploadQiNiu/',
         method: 'post',
         auto: false,
         data: {attach_type: '2'},//附件关联类型
@@ -120,9 +120,18 @@ layui.use(['form', 'table','upload','layedit', 'laydate'], function(){
             vm.picList.push(pic);
         }
     });
+    upload.render({
+        elem: '#uploadVideo',
+        url: '/editUploadQiNiu/',
+        accept: 'video', //视频
+        done: function(res){
+            $("#provideo").val(res.data.src);
+            vm.project.projectVideo = res.data.src;
+        }
+    });
     layedit.set({
         uploadImage: {
-            url: '/editUpload/',
+            url: '/editUploadLocal/',
             type: 'post'
         }
     });
