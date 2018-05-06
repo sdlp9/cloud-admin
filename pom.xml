@@ -52,6 +52,7 @@
 		<aliyun.version>1.2.3</aliyun.version>
 		<kaptcha.version>0.0.9</kaptcha.version>
         <qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
+		<swagger.version>2.7.0</swagger.version>
 	</properties>
 
 	<dependencies>
@@ -167,11 +168,23 @@
 			<artifactId>aliyun-openservices</artifactId>
 			<version>${aliyun.version}</version>
 		</dependency>
+		<!-- 七牛存储 -->
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>qiniu-java-sdk</artifactId>
             <version>${qiniu.version}</version>
         </dependency>
+		<!-- api模块生成接口文档使用 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
