@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-05-04 03:07:25
+Date: 2018-05-07 12:44:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,19 +22,48 @@ DROP TABLE IF EXISTS `t_b_attachs`;
 CREATE TABLE `t_b_attachs` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL COMMENT '文件名称',
-  `type` tinyint(2) DEFAULT NULL COMMENT '文件类型',
-  `status` tinyint(2) DEFAULT NULL COMMENT '状态 1、可用 2、已删除',
+  `type` varchar(50) DEFAULT NULL COMMENT '文件类型',
+  `status` tinyint(2) DEFAULT '1' COMMENT '状态 1、可用 2、已删除',
   `file_size` bigint(20) DEFAULT NULL COMMENT '文件大小',
   `file_path` varchar(500) DEFAULT NULL COMMENT '文件路径',
-  `suffix` varchar(5000) DEFAULT NULL COMMENT '文件后缀',
+  `suffix` varchar(10) DEFAULT NULL COMMENT '文件后缀',
+  `attach_type` tinyint(4) DEFAULT NULL COMMENT '关联类型 1、新闻资讯 2、项目 3、资讯富文本 4、项目富文本',
+  `rel_id` bigint(20) DEFAULT NULL COMMENT '主记录id',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='附件记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='附件记录表';
 
 -- ----------------------------
 -- Records of t_b_attachs
 -- ----------------------------
+INSERT INTO `t_b_attachs` VALUES ('1', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/82ac908b-ec82-4a22-aebf-ca116cf71244.jpg', '.jpg', '1', '1', '2018-05-05 01:50:18', '2018-05-05 01:50:19');
+INSERT INTO `t_b_attachs` VALUES ('4', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/572a6fb2-9980-4861-9c5d-faf3031ecadc.png', '.png', '1', '2', '2018-05-05 03:01:50', '2018-05-05 11:56:31');
+INSERT INTO `t_b_attachs` VALUES ('5', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/fa3bbe0a-f838-4f1c-bc82-600f7b57623e.jpg', '.jpg', '1', '2', '2018-05-05 03:01:50', '2018-05-05 11:56:32');
+INSERT INTO `t_b_attachs` VALUES ('6', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/f6b19c1b-430b-4bcb-a1d5-90dad537835d.png', '.png', '1', '2', '2018-05-05 03:05:53', '2018-05-05 11:56:33');
+INSERT INTO `t_b_attachs` VALUES ('7', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/cc83c28c-39df-4e0b-965e-0a7a7bf7d18a.jpg', '.jpg', '1', '2', '2018-05-05 03:05:53', '2018-05-05 11:56:33');
+INSERT INTO `t_b_attachs` VALUES ('9', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/9458bc39-ceaf-4e03-9b18-2506e099fa09.png', '.png', '1', '3', '2018-05-05 03:09:28', '2018-05-05 11:56:35');
+INSERT INTO `t_b_attachs` VALUES ('10', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/dbf14d45-be36-4f29-b007-3088423d200d.jpg', '.jpg', '1', '3', '2018-05-05 03:09:28', '2018-05-05 11:56:35');
+INSERT INTO `t_b_attachs` VALUES ('14', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/51d150c6-c11d-47ec-95c3-50a121432f5a.png', '.png', '1', '3', '2018-05-05 11:52:37', '2018-05-05 11:56:36');
+INSERT INTO `t_b_attachs` VALUES ('15', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/b7438e8e-4be7-43b3-abcb-a8d1c52467bf.jpg', '.jpg', '1', '3', '2018-05-05 11:52:37', '2018-05-05 11:56:38');
+INSERT INTO `t_b_attachs` VALUES ('16', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/9e50b70a-cb18-4c3d-a4ba-9474f3e0439a.jpg', '.jpg', null, null, '2018-05-05 12:29:24', null);
+INSERT INTO `t_b_attachs` VALUES ('17', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/2fdf2129-7cb3-4962-83fc-0e2ae0f8188d.jpg', '.jpg', null, null, '2018-05-05 13:43:04', null);
+INSERT INTO `t_b_attachs` VALUES ('18', '6712.png', 'image/png', '1', '4204', '/images/2018-05-05/e9b8956f-edcc-4a1d-8bdb-bc7efe7343b9.png', '.png', null, null, '2018-05-05 13:43:15', null);
+INSERT INTO `t_b_attachs` VALUES ('19', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/2931653c-437d-4946-bfe3-1f356dcb8355.png', '.png', null, null, '2018-05-05 13:43:27', null);
+INSERT INTO `t_b_attachs` VALUES ('20', '图片.jpg', 'image/jpeg', '1', '3182', '/images/2018-05-05/302fd845-3630-48f1-8eef-c7e5798e3885.jpg', '.jpg', null, null, '2018-05-05 14:08:16', null);
+INSERT INTO `t_b_attachs` VALUES ('21', '图片.png', 'image/png', '1', '3182', '/images/2018-05-05/4c0801d6-87f7-41c2-8552-9ef936bfc98e.png', '.png', null, null, '2018-05-05 14:09:30', null);
+INSERT INTO `t_b_attachs` VALUES ('23', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/0f48b9ba-9ec7-44c1-b27e-4963019f88f9.jpg', '.jpg', '1', null, '2018-05-05 14:10:22', null);
+INSERT INTO `t_b_attachs` VALUES ('24', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/ed3adbd1-591a-43a9-ace4-cae61dae6063.png', '.png', null, null, '2018-05-05 14:10:41', null);
+INSERT INTO `t_b_attachs` VALUES ('25', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/c4532e8c-6bae-4f79-add7-4f95c35458dc.png', '.png', null, null, '2018-05-05 14:17:47', null);
+INSERT INTO `t_b_attachs` VALUES ('26', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/dc2c5df4-7c19-465e-9278-4366a6229dd5.png', '.png', '1', null, '2018-05-05 14:18:14', null);
+INSERT INTO `t_b_attachs` VALUES ('27', '上传图片.png', 'image/png', '1', '245079', '/images/2018-05-05/15c0d1bf-10c3-4db3-8350-e70f1a307fcb.png', '.png', null, null, '2018-05-05 14:19:54', null);
+INSERT INTO `t_b_attachs` VALUES ('28', 'test.jpg', 'image/jpeg', '1', '590623', '/images/2018-05-05/7ae55d43-c149-4512-88d6-771298bd98dd.jpg', '.jpg', '1', '5', '2018-05-05 14:20:13', '2018-05-05 14:20:23');
+INSERT INTO `t_b_attachs` VALUES ('29', '图片.png', 'image/png', '1', '3182', '/images/2018-05-05/0bc25486-3e6c-420c-92d5-80ecd0c369e4.png', '.png', '1', null, '2018-05-05 15:12:23', null);
+INSERT INTO `t_b_attachs` VALUES ('30', '正面小图.jpg', 'image/jpeg', '1', '36302', '/images/2018-05-06/590b706f-85d7-4ff2-891f-04bf9ba43a56.jpg', '.jpg', '2', null, '2018-05-06 00:24:56', null);
+INSERT INTO `t_b_attachs` VALUES ('31', '反面小图.jpg', 'image/jpeg', '1', '67269', '/images/2018-05-06/cdd92524-f339-4e9b-a039-b2ac027da8b6.jpg', '.jpg', '2', null, '2018-05-06 00:24:56', null);
+INSERT INTO `t_b_attachs` VALUES ('36', '上传图片.png', 'image/png', '1', '245079', 'http://images.lbtang.club/5eed4a34de0147a6b9293967f950c387.png', '.png', '1', null, '2018-05-06 16:19:07', null);
+INSERT INTO `t_b_attachs` VALUES ('37', '上传图片.png', 'image/png', '1', '245079', 'http://images.lbtang.club/37df916cfb1e41d19ee5d1249feb067b.png', '.png', '2', '17', '2018-05-06 18:27:27', '2018-05-06 18:27:31');
+INSERT INTO `t_b_attachs` VALUES ('38', '6712.png', 'image/png', '1', '4204', 'http://images.lbtang.club/9fa45a70636042b8802e0ef32704a556.png', '.png', '2', '18', '2018-05-06 18:28:32', '2018-05-06 18:29:00');
 
 -- ----------------------------
 -- Table structure for t_b_captcha
@@ -77,7 +106,7 @@ CREATE TABLE `t_b_member` (
 -- ----------------------------
 -- Records of t_b_member
 -- ----------------------------
-INSERT INTO `t_b_member` VALUES ('3', '18818524559', 'd343f07e46d11f2d9cc9a3b430a60be61c0e48b91b512e250a026e7007f74a6e', 'bjJ9MgaiO9UyQOPb356a', '2018-03-24 21:07:05', null, null, '1', null, null, null, '741258@qq.com', 'liuyuzhu', '1', null);
+INSERT INTO `t_b_member` VALUES ('3', '18818524559', 'd343f07e46d11f2d9cc9a3b430a60be61c0e48b91b512e250a026e7007f74a6e', 'bjJ9MgaiO9UyQOPb356a', '2018-03-24 21:07:05', null, '刘玉珠', '1', '25', '赛发动范东安抚赛奥法懂啊', null, '741258@qq.com', 'liuyuzhu', '1', '2018-05-06 19:14:26');
 
 -- ----------------------------
 -- Table structure for t_b_news
@@ -87,27 +116,21 @@ CREATE TABLE `t_b_news` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) DEFAULT NULL COMMENT '资讯标题',
   `type` tinyint(2) DEFAULT NULL COMMENT '资讯类型 1 广告 2 新闻',
-  `status` tinyint(2) DEFAULT NULL COMMENT '状态 1、可用 2、已删除',
-  `show_flag` tinyint(2) DEFAULT NULL COMMENT '是否显示 1 显示 0 不显示',
+  `status` tinyint(2) DEFAULT '1' COMMENT '状态 1、可用 2、已删除',
+  `show_flag` tinyint(2) DEFAULT NULL COMMENT '是否显示 1 显示 2 不显示',
   `content` varchar(5000) DEFAULT NULL COMMENT '资讯内容',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='新闻资讯表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='新闻资讯表';
 
 -- ----------------------------
 -- Records of t_b_news
 -- ----------------------------
-INSERT INTO `t_b_news` VALUES ('1', '扥嗲发动', '2', '1', '1', '<img src=\"http://localhost:8080/moviemanage/viewImage?uuid=b7f0a7e9ff584b7881fe99a347178f18\" alt=\"6712.png\" />赛菲尔正很刚', '2018-04-01 01:37:49', '2018-04-01 01:37:50');
-INSERT INTO `t_b_news` VALUES ('2', '测试标题', '1', '1', '1', '<img src=\"http://localhost:8080/moviemanage/viewImage?uuid=1e8697c88046461c8436fa4a97e86453\" alt=\"6712.png\" />as找矿搜寻的，苗冰嗲发动送扥额外', '2018-04-01 11:18:51', '2018-04-01 11:18:52');
-INSERT INTO `t_b_news` VALUES ('7', '小翠害人', '1', '2', '0', '<p>新东方东方鱼骨图月<img src=\"http://localhost:8080/moviemanage/viewImage?uuid=edc8b3bf15934377ab0a7f9cf1939900\" alt=\"6712.png\"/>岑等分点等额酸味儿撒safdsadasasdsad</p><ul class=\" list-paddingleft-2\" style=\"list-style-type: disc;\"><li><p>塞阀赛奥法</p></li><li><p>赛奥法打死</p></li><li><p>啊赛佛dsa东安f奥赛f</p></li><li><p>啊赛佛撒扥</p></li><li><p><br/></p></li></ul>', '2018-04-01 16:13:28', '2018-04-02 01:10:49');
-INSERT INTO `t_b_news` VALUES ('9', 're团圆屯', '1', '1', '0', '塞阀赛风赛风分仓费当个人扥h<img src=\"http://localhost:8080/moviemanage/viewImage?uuid=8266229e5a1c4dff98df87f035fc73d1\" alt=\"6712.png\" />仓泵费等', '2018-04-01 16:29:13', '2018-04-01 16:29:14');
-INSERT INTO `t_b_news` VALUES ('10', '东few费等软腭', '1', '1', '0', '扥僧人的阿塞阀东方<strong>阿塞阀塞阀三</strong><strong><img src=\"http://localhost:8080/moviemanage/viewImage?uuid=75c32d692a184cbd9829feb41a07f273\" alt=\"6712.png\" /></strong><strong>赛风德森</strong>', '2018-04-01 17:16:27', '2018-04-01 17:16:28');
-INSERT INTO `t_b_news` VALUES ('11', '测试修改能', '1', '1', '0', '撒扥东啊发<strong>撒扥东啊发</strong><strong>赛奥法sad东安抚</strong><strong>sdaf东安抚</strong><strong>asdf&amp;nbsp;</strong><strong><img src=\"http://localhost:8080/moviemanage/viewImage?uuid=7009b35807274b0b8db178833144d171\" alt=\"6712.png\" /></strong><strong>狂啊赛佛领囧</strong>', '2018-04-01 17:28:04', '2018-04-01 17:28:06');
-INSERT INTO `t_b_news` VALUES ('12', '测试修改成功否', '1', '1', '0', '<p>&nbsp; &nbsp;萨芬东非<strong>赛发动发</strong><strong>阿赛发动安抚</strong><strong>东安抚东安抚</strong><strong>洗澡负债森</strong><strong>撒扥东非</strong><strong>在线崔满您看好</strong><strong>，口橡胶岑拽进动画</strong><strong>sad灵泛灵动案件&amp;nbsp;</strong>\n\n\n &nbsp; &nbsp;<strong>塞阀撒扥</strong> &amp;nbsp;<strong>我的红色字体</strong>\n\n\n &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>上一上车</strong>\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>5端月肉盾</strong>\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp;\n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>刚均衡</strong>\n &nbsp; &nbsp;</p><p><span style=\"color: rgb(255, 0, 0);\">扥根等</span></p><p>扥个放灯<span style=\"color: rgb(255, 0, 0);\">扥个df放灯fd</span></p><p>dfs该放松g&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p><p><img src=\"http://localhost:8080/moviemanage/viewImage?uuid=21e848e979074a97aa9396362ea48932\" title=\"test\" alt=\"test.jpg\"/></p>', '2018-04-01 17:35:07', '2018-04-02 01:06:39');
-INSERT INTO `t_b_news` VALUES ('13', '测试销毁', '2', '1', '1', '思想扥东方', '2018-04-01 17:40:21', '2018-04-01 17:40:22');
-INSERT INTO `t_b_news` VALUES ('14', '测试销毁', '2', '1', '0', '<p>撒扥领撒扥领翻看领</p><p><img src=\"http://localhost:8080/moviemanage/viewImage?uuid=057d06ef5c364407a4d334bda880c4c7\" title=\"6712\" alt=\"6712.png\"/></p>', '2018-04-01 17:42:08', '2018-04-06 14:19:44');
-INSERT INTO `t_b_news` VALUES ('18', '赛粉丝', '1', '1', '1', '', '2018-04-06 14:37:24', '2018-05-02 00:42:24');
+INSERT INTO `t_b_news` VALUES ('1', '测试图片', '1', '1', '1', null, '2018-05-05 01:50:19', '2018-05-05 02:54:04');
+INSERT INTO `t_b_news` VALUES ('2', '图片2', '1', '1', '2', null, '2018-05-05 03:02:10', null);
+INSERT INTO `t_b_news` VALUES ('3', '图片3', '2', '1', '1', null, '2018-05-05 03:05:55', null);
+INSERT INTO `t_b_news` VALUES ('5', '赛发动', '1', '1', '2', '<p>赛发动啊</p><p><u>或尝试哦</u></p><p><b>根据风景</b></p><p><b>跟战台风飓风</b></p><p><b><img src=\"/images/2018-05-05/15c0d1bf-10c3-4db3-8350-e70f1a307fcb.png\" alt=\"15c0d1bf-10c3-4db3-8350-e70f1a307fcb.png\"><br></b></p><p><b>钢结构出月</b></p><p>回避斩恒基</p><p>东方赛阿萨发的<img src=\"http://localhost:18080/static/layui/images/face/46.gif\" alt=\"[互粉]\"></p><p><strike>证件根据跟</strike></p>', '2018-05-05 14:20:23', '2018-05-05 14:22:10');
 
 -- ----------------------------
 -- Table structure for t_b_project
@@ -120,26 +143,32 @@ CREATE TABLE `t_b_project` (
   `project_cost` decimal(10,2) DEFAULT NULL COMMENT '项目成本',
   `project_header` varchar(255) DEFAULT NULL COMMENT '项目发起人',
   `financing_money` decimal(10,2) DEFAULT NULL COMMENT '筹资金额',
-  `start_time` timestamp NULL DEFAULT NULL COMMENT '投资开始时间',
-  `end_time` timestamp NULL DEFAULT NULL COMMENT '投资结束时间',
+  `start_time` varchar(20) DEFAULT NULL COMMENT '投资开始时间',
+  `end_time` varchar(20) DEFAULT NULL COMMENT '投资结束时间',
   `project_label` varchar(255) DEFAULT NULL COMMENT '项目标签 如 永久版权 永久福利等',
   `project_cover_charge` decimal(10,2) DEFAULT NULL COMMENT '项目服务费',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `project_type` tinyint(2) DEFAULT NULL COMMENT '项目类型 1 网络电影 2 院线电影',
   `project_status` tinyint(2) DEFAULT NULL COMMENT '项目状态 1 即将上线 2 正在募集 3 募集完成',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `status` tinyint(2) DEFAULT '1' COMMENT '状态 1、可用 2、已删除',
+  `status` tinyint(4) DEFAULT '1' COMMENT '状态 1、可用 2、已删除',
   `examine_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1、新建 2、已提交未审核 3 驳回 4 审核通过',
-  `publish_status` tinyint(2) DEFAULT NULL COMMENT '是否发布 1 发布 0 未发布',
+  `publish_status` tinyint(2) DEFAULT NULL COMMENT '是否发布 1 发布 2 未发布',
   `project_des` text COMMENT '项目介绍',
   `remark` varchar(500) DEFAULT NULL COMMENT '审核意见',
+  `index_flag` tinyint(4) DEFAULT '1' COMMENT '是否推送到首页，1、是；2、否',
+  `project_video` varchar(500) DEFAULT NULL COMMENT '项目视频地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='项目表';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='项目表';
 
 -- ----------------------------
 -- Records of t_b_project
 -- ----------------------------
-INSERT INTO `t_b_project` VALUES ('13', '撒扥三', null, '3000.00', '塞阀', '1111.00', '2018-04-04 00:00:00', '2018-04-13 00:00:00', '1211娃儿', '212.00', '2018-04-07 01:34:27', '2', '1', '2018-04-07 01:34:29', '1', '1', '0', '<p><span style=\"color: rgb(255, 0, 0);\">撒扥赛奥法</span><br/></p><p><span style=\"color: rgb(255, 0, 0);\">空lad范惶恐搭建</span></p><ul class=\" list-paddingleft-2\" style=\"list-style-type: disc;\"><li><p><span style=\"color: rgb(255, 0, 0);\">赛奥法库三扥狂</span></p></li><li><p><span style=\"color: rgb(255, 0, 0);\">死开啦减负令赛季</span></p></li><li><p><span style=\"color: rgb(255, 0, 0);\">赛蓝风铃赛季</span></p></li><li><p><span style=\"color: rgb(255, 0, 0);\">龙扥将空单</span></p></li></ul><p><span style=\"color: rgb(255, 0, 0);\"><img src=\"http://193.112.67.154:8080/viewImage?uuid=36e92d5fc30b45768ac09f6ac7e76b32\" title=\"6712\" alt=\"6712.png\"/></span></p><p><span style=\"color: rgb(255, 0, 0);\">司令单法令赛季</span></p><p><span style=\"color: rgb(255, 0, 0);\">赛领积分灵动</span></p>', null);
+INSERT INTO `t_b_project` VALUES ('15', '测试项目', null, '100.00', '强', '150.00', '2018-05-07', '2018-05-21', 'dfse', '200.00', '2018-05-06 01:29:33', '1', '2', '2018-05-06 17:09:03', '1', '4', '1', null, 'sadsadsadsadxcvxc赛发动范', '1', null);
+INSERT INTO `t_b_project` VALUES ('16', 'qaz 去啊', null, '22.00', '去玩儿', '222.00', '2018-05-02', '2018-05-22', '1奥赛', '333.00', '2018-05-06 18:24:54', '1', '2', null, '1', '1', '2', '<p>赛风赛风东</p><p>跟赵很刚</p><p><b>赛发动范东</b></p><p><b>崔本仓泵跟</b></p>', null, '1', null);
+INSERT INTO `t_b_project` VALUES ('17', '赛发动', null, '4444.00', '扥盖房', '444.00', '2018-05-08', '2018-05-21', '色热无若', '43543.00', '2018-05-06 18:27:31', '1', '3', null, '1', '1', '2', null, null, '1', null);
+INSERT INTO `t_b_project` VALUES ('18', '1去啊', null, '231.00', '爱玩儿啊', '2344.00', '2018-05-08', '2018-05-15', '12阿瑟大', '234.00', '2018-05-06 18:29:00', '1', '1', null, '1', '1', '2', '扥该人该', null, '1', null);
+INSERT INTO `t_b_project` VALUES ('19', '东非', null, '44.00', '饿死我', '324.00', '2018-05-17', '2018-05-23', '赛风赛', '34.00', '2018-05-06 18:30:33', '1', '1', null, '1', '1', '2', null, null, '1', 'http://images.lbtang.club/979426fade2d4b21a5ebb72a6167967a.mp4');
 
 -- ----------------------------
 -- Table structure for t_sys_config
@@ -195,7 +224,7 @@ CREATE TABLE `t_sys_menu` (
   `order_num` int(11) DEFAULT NULL COMMENT '排序',
   `status` tinyint(2) DEFAULT '1' COMMENT '状态 1、可用 2、已删除',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
 
 -- ----------------------------
 -- Records of t_sys_menu
@@ -219,8 +248,8 @@ INSERT INTO `t_sys_menu` VALUES ('26', '4', '删除', null, 'sys:menu:delete', '
 INSERT INTO `t_sys_menu` VALUES ('29', '1', '系统日志', 'modules/sys/log.html', 'sys:log:list', '1', 'fa fa-file-text-o', '7', '2');
 INSERT INTO `t_sys_menu` VALUES ('30', '1', '文件上传', 'modules/oss/oss.html', 'sys:oss:all', '1', 'fa fa-file-image-o', '6', '2');
 INSERT INTO `t_sys_menu` VALUES ('31', '0', '项目管理', '', null, '0', 'layui-icon layui-icon-zzfilm', '3', '1');
-INSERT INTO `t_sys_menu` VALUES ('40', '0', '会员管理', '', null, '0', 'layui-icon layui-icon-zzfilm', '1', '1');
-INSERT INTO `t_sys_menu` VALUES ('41', '40', '会员列表', 'modules/member/member.html', null, '1', 'fa fa-user', '6', '1');
+INSERT INTO `t_sys_menu` VALUES ('40', '0', '会员管理', '', null, '0', 'layui-icon layui-icon-iconfontwodehaoyou', '1', '1');
+INSERT INTO `t_sys_menu` VALUES ('41', '40', '会员列表', '/member/memberList', null, '1', 'layui-icon layui-icon-iconfontwodehaoyou', '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('42', '41', '查看', null, 'sys:member:list,sys:member:info', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('43', '41', '新增', null, 'sys:member:save', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('44', '41', '修改', null, 'sys:member:update', '2', null, '6', '1');
@@ -231,14 +260,14 @@ INSERT INTO `t_sys_menu` VALUES ('48', '47', '查看', null, 'sys:news:list,sys:
 INSERT INTO `t_sys_menu` VALUES ('49', '47', '新增', null, 'sys:news:save', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('50', '47', '修改', null, 'sys:news:update', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('51', '47', '删除', null, 'sys:news:delete', '2', null, '6', '1');
-INSERT INTO `t_sys_menu` VALUES ('52', '31', '项目管理', 'modules/project/project.html', null, '1', 'layui-icon layui-icon-zzfilm', '6', '1');
+INSERT INTO `t_sys_menu` VALUES ('52', '31', '项目管理', '/project/projectList', null, '1', 'layui-icon layui-icon-zzfilm', '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('53', '52', '查看', null, 'project:project:list,project:project:info', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('54', '52', '新增', null, 'project:project:save', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('55', '52', '修改', null, 'project:project:update', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('56', '52', '删除', null, 'project:project:delete', '2', null, '6', '1');
 INSERT INTO `t_sys_menu` VALUES ('57', '52', '提审', null, 'project:project:approval', '2', null, '0', '1');
 INSERT INTO `t_sys_menu` VALUES ('59', '52', '发布', null, 'project:project:publish', '2', null, '0', '1');
-INSERT INTO `t_sys_menu` VALUES ('60', '31', '项目审核', 'modules/project/approvalpro.html', null, '1', null, '2', '1');
+INSERT INTO `t_sys_menu` VALUES ('60', '31', '项目审核', '/project/approvalList', null, '1', null, '2', '1');
 INSERT INTO `t_sys_menu` VALUES ('61', '60', '审核', null, 'project:project:examine,project:project:approvallist', '2', null, '0', '1');
 
 -- ----------------------------
